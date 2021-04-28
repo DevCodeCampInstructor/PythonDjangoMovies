@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Movie</title>
+</head>
+<body>
+    <h1>Create</h1>
+    <form action="{% url 'movies_app:update' movie.id %}" method="post">
+        {% csrf_token %}
+        Title: <input type="text" name="title" id="title" value={{movie.title}}>
+        Genre: <input type="text" name="genre" id="genre" value={{movie.genre}}>
+        Runtime: <input type="text" name="runtime" id="runtime" value={{movie.runtime}}>
+        Release Date: <input type="date" name="date" id="date" value={{movie.release_date|date:"Y-m-d"}}>
+        <button type="submit">Update</button>
+    </form>
+</body>
+</html>

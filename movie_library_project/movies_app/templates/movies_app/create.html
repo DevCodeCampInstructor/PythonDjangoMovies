@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create</title>
+</head>
+<body>
+    <h1>Create</h1>
+    <form action="{% url 'movies_app:create' %}" method="post">
+        {% csrf_token %}
+        Title: <input type="text" name="title" id="title">
+        Genre: <input type="text" name="genre" id="genre">
+        Runtime: <input type="text" name="runtime" id="runtime">
+        Release Date: <input type="date" name="date" id="date">
+        <button type="submit">Create</button>
+    </form>
+</body>
+</html>

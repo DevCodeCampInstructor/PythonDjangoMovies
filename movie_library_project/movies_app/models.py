@@ -6,13 +6,10 @@ class Movie(models.Model):
     genre = models.CharField(max_length=50)
     runtime = models.IntegerField()
     release_date = models.DateField()
-    likes = models.IntegerField()
-    watch_count = models.IntegerField()
+    likes = models.IntegerField(default=0)
+    watch_count = models.IntegerField(default=0)
 
 class MovieReview(models.Model):
-    text = models.CharField(max_length=200)
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-
-class MovieRating(models.Model):
-    rating = models.IntegerField()
+    review_text = models.CharField(max_length=200)
+    rating = models.IntegerField(default=5)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)

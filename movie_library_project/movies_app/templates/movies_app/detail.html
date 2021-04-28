@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Details</title>
+</head>
+<body>
+    <h1>{{movie.title}}</h1>
+    <h1>{{movie.release_date}}</h1>
+    <h1>{{movie.likes}}</h1>
+    {% if average_rating != False %} <h1>Rating {{average_rating}}</h1> {% else %} <h1>Be the first one to leave a review!</h1> {% endif %}
+
+    <h1>Leave a Review</h1>
+    <form action="{% url 'movies_app:create_review' movie.id %}" method="post">
+        {% csrf_token %}
+        Review: <input type="text" name="review_text" id="review_text">
+        Rating: <input type="number" name="rating" id="rating" value=5>
+        <button type="submit">Leave Review</button>
+    </form>
+
+    {% for review in reviews %}
+        <h3>{{review.rating}}</h3>
+        <h3>{{review.review_text}}</h3>
+    {% endfor %}
+</body>
+</html>

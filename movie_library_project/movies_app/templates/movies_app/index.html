@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movies</title>
+</head>
+<body>
+    <h1>List of Movies</h1>
+    <ul>
+        {% for movie in all_movies %}
+            <li>
+                <h2>{{movie.title}} Likes: {{movie.likes}} Watch Count: {{movie.watch_count}}</h2>
+                <a href="{% url 'movies_app:detail' movie.id %}">See more info</a>
+                <a href="{% url 'movies_app:update' movie.id %}">Edit</a>
+                <a href="{% url 'movies_app:delete' movie.id %}">Delete</a>
+                <a href="{% url 'movies_app:increment_likes' movie.id %}">Like</a>
+                <a href="{% url 'movies_app:increment_watch_count' movie.id %}">Watched</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
