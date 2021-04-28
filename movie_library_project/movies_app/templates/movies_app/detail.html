@@ -5,6 +5,16 @@
     <title>Movie Details</title>
 </head>
 <body>
+    {% if movie.image_url != '' %}
+        <img style="width: 300px" src={{movie.image_url}}>
+    {% endif %}
+    <h1>{{has_image|yesno:"Change,Add" }} Image</h1>
+    <form action="{% url 'movies_app:add_image' movie.id %}" method="post">
+        {% csrf_token %}
+        Image Link: <input type="text" name="image_url" id="image_url">
+        <button type="submit">{{has_image|yesno:"Change,Add" }} Image</button>
+    </form>
+
     <h1>{{movie.title}}</h1>
     <h1>{{movie.release_date}}</h1>
     <h1>{{movie.likes}}</h1>
@@ -22,5 +32,6 @@
         <h3>{{review.rating}}</h3>
         <h3>{{review.review_text}}</h3>
     {% endfor %}
+
 </body>
 </html>

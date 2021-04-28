@@ -19,7 +19,8 @@ def detail(request, movie_id):
     context ={
         'movie': movie,
         'reviews': reviews,
-        'average_rating': False if len(reviews) == 0 else round(sum(review.rating for review in reviews) / len(reviews), 1)
+        'average_rating': False if len(reviews) == 0 else round(sum(review.rating for review in reviews) / len(reviews), 1),
+        'has_image': movie.image_url != '',
     }
     return render(request, 'movies_app/detail.html', context)
 
@@ -64,6 +65,13 @@ def create_review(request, movie_id):
     rating = 0 if rating < 0 else 10 if rating > 10 else rating
     movie_review = MovieReview(review_text=review_text, rating=rating, movie_id=movie_id)
     movie_review.save()
+    return HttpResponseRedirect(reverse('movies_app:detail', kwargs={'movie_id': movie_id}))
+
+
+def add_image(request, movie_id):
+    image_url = request.POST.get('image_url')
+    print(f'Image URL {image_url}')
+    Movie.objects.filter(pk=movie_id).update(image_url=image_url)
     return HttpResponseRedirect(reverse('movies_app:detail', kwargs={'movie_id': movie_id}))
 
 

@@ -8,6 +8,7 @@ class Movie(models.Model):
     release_date = models.DateField()
     likes = models.IntegerField(default=0)
     watch_count = models.IntegerField(default=0)
+    image_url = models.CharField(max_length=500, default='')
 
 class MovieReview(models.Model):
     review_text = models.CharField(max_length=200)
