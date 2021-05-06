@@ -16,10 +16,16 @@ def index(request):
 def detail(request, movie_id):
     movie = Movie.objects.get(pk=movie_id)
     reviews = MovieReview.objects.filter(movie_id=movie_id).all()
-    context ={
+    average_rating = False if len(reviews) == 0 else round(sum(review.rating for review in reviews) / len(reviews), 0)
+    average_rating = int(average_rating)
+    full_stars = range(average_rating if average_rating <= 5 else 5)
+    empty_stars = range(5 - average_rating if 5 - average_rating > 0 else 0)
+    context = {
         'movie': movie,
         'reviews': reviews,
-        'average_rating': False if len(reviews) == 0 else round(sum(review.rating for review in reviews) / len(reviews), 1),
+        'average_rating': average_rating,
+        'full_stars': full_stars,
+        'empty_stars': empty_stars,
         'has_image': movie.image_url != '',
     }
     return render(request, 'movies_app/detail.html', context)
@@ -29,9 +35,13 @@ def create(request):
     if request.method == 'POST':
         name = request.POST.get('title')
         genre = request.POST.get('genre')
+        description = request.POST.get('description')
         runtime = request.POST.get('runtime')
         release_date = request.POST.get('date')
-        new_movie = Movie(title=name, genre=genre, runtime=runtime, release_date=release_date)
+        image_url = request.POST.get('image_url')
+        new_movie = Movie(title=name, genre=genre, description=description, runtime=runtime, release_date=release_date)
+        if image_url != '':
+            new_movie.image_url = image_url
         new_movie.save()
         return HttpResponseRedirect(reverse('movies_app:index'))
     else:
@@ -42,9 +52,11 @@ def update(request, movie_id):
     if request.method == 'POST':
         title = request.POST.get('title')
         genre = request.POST.get('genre')
+        description = request.POST.get('description')
         runtime = request.POST.get('runtime')
         release_date = request.POST.get('date')
-        Movie.objects.filter(pk=movie_id).update(title=title, genre=genre, runtime=runtime, release_date=release_date)
+        image_url = request.POST.get('image_url')
+        Movie.objects.filter(pk=movie_id).update(title=title, genre=genre, description=description, runtime=runtime, release_date=release_date, image_url=image_url)
         return HttpResponseRedirect(reverse('movies_app:index'))
     else:
         movie = Movie.objects.get(pk=movie_id)

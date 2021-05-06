@@ -1,18 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Create</title>
-</head>
-<body>
-    <h1>Create</h1>
-    <form action="{% url 'movies_app:create' %}" method="post">
-        {% csrf_token %}
-        Title: <input type="text" name="title" id="title">
-        Genre: <input type="text" name="genre" id="genre">
-        Runtime: <input type="text" name="runtime" id="runtime">
-        Release Date: <input type="date" name="date" id="date">
-        <button type="submit">Create</button>
-    </form>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Create Movie{% endblock %}
+
+{% block content %}
+    <h1 style="margin: 3rem">Add New Movie</h1>
+    <div class="card" style="margin: 3rem; padding: 3rem">
+        <form action="{% url 'movies_app:create' %}" method="post">
+            {% csrf_token %}
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input class="form-control" type="text" name="title" id="title">
+                </div>
+                <div class="form-group">
+                    <label>Genre</label>
+                    <input class="form-control" type="text" name="genre" id="genre">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input class="form-control" type="text" name="description" id="description">
+                </div>
+                <div class="form-group">
+                    <label>Runtime</label>
+                    <input class="form-control" type="text" name="runtime" id="runtime">
+                </div>
+                <div class="form-group">
+                    <label>Image</label>
+                    <input class="form-control" type="text" name="image_url" id="image_url">
+                </div>
+                <div class="form-group">
+                    <label>Release Date</label>
+                    <input class="form-control" type="date" name="date" id="date">
+                </div>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

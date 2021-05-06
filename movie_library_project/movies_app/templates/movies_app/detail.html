@@ -1,37 +1,89 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Movie Details</title>
-</head>
-<body>
-    {% if movie.image_url != '' %}
-        <img style="width: 300px" src={{movie.image_url}}>
-    {% endif %}
-    <h1>{{has_image|yesno:"Change,Add" }} Image</h1>
-    <form action="{% url 'movies_app:add_image' movie.id %}" method="post">
-        {% csrf_token %}
-        Image Link: <input type="text" name="image_url" id="image_url">
-        <button type="submit">{{has_image|yesno:"Change,Add" }} Image</button>
-    </form>
+{% extends "base.html" %}
 
-    <h1>{{movie.title}}</h1>
-    <h1>{{movie.release_date}}</h1>
-    <h1>{{movie.likes}}</h1>
-    {% if average_rating != False %} <h1>Rating {{average_rating}}</h1> {% else %} <h1>Be the first one to leave a review!</h1> {% endif %}
+{% block title %}Movies{% endblock %}
 
-    <h1>Leave a Review</h1>
-    <form action="{% url 'movies_app:create_review' movie.id %}" method="post">
-        {% csrf_token %}
-        Review: <input type="text" name="review_text" id="review_text">
-        Rating: <input type="number" name="rating" id="rating" value=5>
-        <button type="submit">Leave Review</button>
-    </form>
+{% block content %}
 
-    {% for review in reviews %}
-        <h3>{{review.rating}}</h3>
-        <h3>{{review.review_text}}</h3>
-    {% endfor %}
+    <div>
+        <div class="card" style="margin-left:3rem; margin-right:3rem; padding:3rem;">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-4">
+                    <div>
+                        <h4>{{movie.title}}</h4>
+                        {% for i in full_stars %}
+                            <span class="fa fa-star checked"></span>
+                        {% endfor %}
+                        {% for i in empty_stars %}
+                            <span class="fa fa-star"></span>
+                        {% endfor %}
+                        <p>{{movie.description}}</p>
+                        <label style="font-weight: bold;">Genre</label>
+                        <p>{{movie.genre}}</p>
+                        <label style="font-weight: bold;">Rating</label>
+                        <p class="card-text">{% if average_rating != False %} {{average_rating}} {% else %} Be the first one to leave a review!{% endif %}</p>
+                        <a href="{% url 'movies_app:update' movie.id %}" class="btn btn-primary">Edit</a>
+                        <a href="{% url 'movies_app:index' %}" class="btn btn-primary">Back To List</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <img style="width: 300px" src={{movie.image_url}}>
+                </div>
+                
+                <div class="col-md-2"></div>
+            </div>
+        </div>
+    </div>
+    <div class="card" style="margin-left:3rem; margin-right:3rem; padding:3rem;">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <h2>Reviews</h2>
+                <hr/>
+                <div class="rate form-group">
+                    <input type="radio" id="star5" name="rate" value="5" onclick="changeRating(5)" />
+                    <label for="star5" title="text">5 stars</label>
+                    <input type="radio" id="star4" name="rate" value="4" onclick="changeRating(4)" />
+                    <label for="star4" title="text">4 stars</label>
+                    <input type="radio" id="star3" name="rate" value="3" onclick="changeRating(3)" />
+                    <label for="star3" title="text">3 stars</label>
+                    <input type="radio" id="star2" name="rate" value="2" onclick="changeRating(2)" />
+                    <label for="star2" title="text">2 stars</label>
+                    <input type="radio" id="star1" name="rate" value="1" onclick="changeRating(1)" />
+                    <label for="star1" title="text">1 star</label>
+                </div>
+                <form action="{% url 'movies_app:create_review' movie.id %}" method="post" style="padding-top: 4em">
+                    {% csrf_token %}
+                    <input type="number" name="rating" id="rating" value=0  style="display: none;"/>
+                    <div class="form-group">
+                        <label>Review: </label>
+                        <textarea type="text" name="review_text" id="review_text" style="width: 100%;" ></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">Leave Review</button>
+                    </div>
+                </form>
+                {% for review in reviews %}
+                <div style="padding-bottom: 2em;">
+                    <div class="card" >
+                        <h5 class="card-title">{{review.rating}}</h5>
+                        <p class="card-text">{{review.review_text}}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+</div>
 
-</body>
-</html>
+<script>
+    function changeRating(newRating){
+        let oldRating = $("#rating").val();
+        console.log('Old Rating', oldRating);
+        console.log('New Rating', newRating);
+        $("#rating").val(newRating);
+    }
+</script>
+
+{% endblock %}
